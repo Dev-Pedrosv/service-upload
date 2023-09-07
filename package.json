@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/index.ts"
+    "dev": "tsx watch src/index.ts",
+    "start": "node src/index.js"
+  },
+  "engines": {
+    "node": "18.x"
   },
   "author": "",
   "license": "ISC",
