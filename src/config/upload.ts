@@ -1,7 +1,9 @@
+import { Request } from "express"
+
 const {google} = require('googleapis')
 const fs = require('fs')
 
-export async function uploadFile(req) {
+export async function uploadFile(req: Request) {
   try {
     const { folderId, client_id, private_key, client_email} = req.body
 
@@ -18,14 +20,20 @@ export async function uploadFile(req) {
       return { message: 'Missing client_email' }
     }
 
-    const file = {
+    const file = req.file
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    const newFileName = 'file-' + uniqueSuffix + '-' + file!.originalname;
+
+    file!.filename = newFileName;
+
+    const config = {
       client_email: client_email,
       client_id: client_id,
       private_key: JSON.parse(private_key)
     }
 
     const auth = new google.auth.GoogleAuth({
-      credentials: file,
+      credentials: config,
       scopes: ['https://www.googleapis.com/auth/drive'],
     })
 
@@ -35,13 +43,17 @@ export async function uploadFile(req) {
     })
 
     const fileMetaData = {
-      name: req?.file?.filename,
+      name: file?.filename,
       parents: [folderId],
     }
 
+    const readableStream = fs.createReadStream(null, { start: 0, end: file?.buffer.length, fd: 0, autoClose: false });
+    readableStream.push(file?.buffer);
+    readableStream.push(null);
+
     const media = {
-      mimeType: req?.file?.mimetype,
-      body: fs.createReadStream(req?.file?.path),
+      mimeType: file?.mimetype,
+      body: readableStream,
     }
 
     const res = await driveService.files.create({
@@ -54,26 +66,7 @@ export async function uploadFile(req) {
     return urlImage
 
   } catch (err) {
-    console.log(err)
+    console.log({err})
     return { message: 'Erro ao salvar imagem' }
-  } finally {
-    deleteFile(req)
-  }
-}
-
-export function deleteFile(req) {
-  try {
-    const filePath = req?.file?.path
-    if (filePath) {
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.log('Error deleting file', err)
-        }
-      })
-    }
-    return { message: 'Image deleted successfully' }
-  } catch (err) {
-    console.log('Delete file error', err)
-    return { message: 'Error deleting image' }
-  }
+  } 
 }
