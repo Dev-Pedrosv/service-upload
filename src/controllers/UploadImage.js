@@ -1,8 +1,7 @@
 import { uploadFile } from '../config/upload'
-import { Request, Response } from 'express'
 
 export const UploadImageController = {
-  upload: async (req: Request, res: Response) => {
+  upload: async (req, res) => {
     try {
       if(!req.file){
         throw new Error('Missing file')
@@ -11,7 +10,7 @@ export const UploadImageController = {
       const imageUrl  = await uploadFile(req)
       return res.status(201).json(imageUrl)
 
-    } catch (err: any) {
+    } catch (err) {
       return res.status(500).json({
         message: err.message || 'Internal Server Error',
       })

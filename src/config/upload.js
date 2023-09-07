@@ -1,9 +1,7 @@
-import { Request } from 'express'
-
 const {google} = require('googleapis')
 const fs = require('fs')
 
-export async function uploadFile(req: Request) {
+export async function uploadFile(req) {
   try {
     const { folderId, client_id, private_key, client_email} = req.body
 
@@ -63,11 +61,11 @@ export async function uploadFile(req: Request) {
   }
 }
 
-export function deleteFile(req: Request) {
+export function deleteFile(req) {
   try {
     const filePath = req?.file?.path
     if (filePath) {
-      fs.unlink(filePath, (err: any) => {
+      fs.unlink(filePath, (err) => {
         if (err) {
           console.log('Error deleting file', err)
         }
