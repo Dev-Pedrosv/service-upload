@@ -29,7 +29,7 @@ export async function uploadFile(req: Request) {
     const config = {
       client_email: client_email,
       client_id: client_id,
-      private_key: JSON.parse(private_key)
+      private_key: private_key
     }
 
     const auth = new google.auth.GoogleAuth({
