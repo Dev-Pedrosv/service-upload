@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { uploadFile } from '../config/upload'
 
-const imageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
 
 export const UploadImageController = {
   upload: async (req: Request, res: Response) => {
@@ -13,7 +13,7 @@ export const UploadImageController = {
       const fileExtension = req.file.originalname.split('.').pop().toLowerCase();
 
       if (!imageExtensions.includes(fileExtension)) {
-        throw new Error('Invalid file type. Only image files are allowed.');
+        throw new Error('Invalid file type. Types allowed: jpg, jpeg, png, gif and webp');
       }
 
       const imageUrl  = await uploadFile(req)

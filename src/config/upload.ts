@@ -67,6 +67,6 @@ export async function uploadFile(req: Request) {
 
   } catch (err) {
     console.log({err})
-    return { message: 'Erro ao salvar imagem' }
+    return { message: 'Erro ao salvar a imagem', err }
   } 
 }
