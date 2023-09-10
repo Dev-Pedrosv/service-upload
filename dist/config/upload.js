@@ -35,7 +35,7 @@ function uploadFile(req) {
             const config = {
                 client_email: client_email,
                 client_id: client_id,
-                private_key: JSON.parse(private_key)
+                private_key: private_key
             };
             const auth = new google.auth.GoogleAuth({
                 credentials: config,
@@ -66,7 +66,7 @@ function uploadFile(req) {
         }
         catch (err) {
             console.log({ err });
-            return { message: 'Erro ao salvar imagem' };
+            return { message: 'Erro ao salvar a imagem', err };
         }
     });
 }

@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UploadImageController = void 0;
 const upload_1 = require("../config/upload");
-const imageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
 exports.UploadImageController = {
     upload: (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
@@ -20,7 +20,7 @@ exports.UploadImageController = {
             }
             const fileExtension = req.file.originalname.split('.').pop().toLowerCase();
             if (!imageExtensions.includes(fileExtension)) {
-                throw new Error('Invalid file type. Only image files are allowed.');
+                throw new Error('Invalid file type. Types allowed: jpg, jpeg, png, gif and webp');
             }
             const imageUrl = yield (0, upload_1.uploadFile)(req);
             return res.status(201).json(imageUrl);
